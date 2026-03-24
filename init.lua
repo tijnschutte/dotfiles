@@ -166,6 +166,12 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Auto-reload files changed outside of Neovim (e.g. by Claude Code, git, etc.)
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
+  command = 'checktime',
+})
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -412,7 +418,13 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            hidden = true,
+            no_ignore = true,
+            file_ignore_patterns = { '%.git/', 'node_modules/' },
+          },
+        },
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
         },
@@ -799,6 +811,8 @@ require('lazy').setup({
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
       },
 
+      cmdline = { enabled = true },
+
       sources = {
         default = { 'lsp', 'path', 'snippets' },
       },
@@ -836,6 +850,8 @@ require('lazy').setup({
       vim.cmd.colorscheme("rose-pine-moon")
       vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
       vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+      vim.api.nvim_set_hl(0, "Pmenu", { bg = "#2a273f" })
+      vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#44415a" })
     end,
   },
 
@@ -880,6 +896,13 @@ require('lazy').setup({
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function() return '%2l:%-2v' end
+
+      -- Auto-save and restore sessions per directory
+      -- Opens fresh when you pass a file argument (e.g. `nvim somefile.txt`)
+      require('mini.sessions').setup {
+        autoread = true,
+        autowrite = true,
+      }
 
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
@@ -939,7 +962,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
