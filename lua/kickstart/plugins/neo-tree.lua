@@ -18,7 +18,28 @@ return {
   ---@module 'neo-tree'
   ---@type neotree.Config
   opts = {
+    default_component_configs = {
+      diagnostics = {
+        symbols = {
+          hint = '󰌵',
+          info = '',
+          warn = '',
+          error = '',
+        },
+        highlights = {
+          hint = 'DiagnosticSignHint',
+          info = 'DiagnosticSignInfo',
+          warn = 'DiagnosticSignWarn',
+          error = 'DiagnosticSignError',
+        },
+      },
+    },
     filesystem = {
+      filtered_items = {
+        visible = true,
+        hide_dotfiles = false,
+        hide_gitignored = false,
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',
