@@ -908,6 +908,9 @@ require('lazy').setup({
         autowrite = true,
       }
 
+      -- Move lines/selections with Alt+hjkl
+      require('mini.move').setup()
+
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
     end,
