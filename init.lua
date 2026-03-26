@@ -105,6 +105,7 @@ vim.o.number = true
 vim.o.relativenumber = true
 
 vim.o.wrap = false
+vim.o.colorcolumn = '80'
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -132,7 +133,7 @@ vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
 
 -- Decrease update time
-vim.o.updatetime = 250
+vim.o.updatetime = 50
 
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
@@ -279,9 +280,7 @@ require('lazy').setup({
 
   {
     'tpope/vim-fugitive',
-    config = function()
-      vim.keymap.set('n', '<leader>gs', vim.cmd.Git, { desc = '[G]it [S]tatus' })
-    end,
+    config = function() vim.keymap.set('n', '<leader>gs', vim.cmd.Git, { desc = '[G]it [S]tatus' }) end,
   },
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
@@ -419,13 +418,7 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        pickers = {
-          find_files = {
-            hidden = true,
-            no_ignore = true,
-            file_ignore_patterns = { '%.git/', 'node_modules/' },
-          },
-        },
+        pickers = {},
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
         },
@@ -441,6 +434,12 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
+      vim.keymap.set(
+        'n',
+        '<leader>fF',
+        function() builtin.find_files { hidden = true, no_ignore = true, file_ignore_patterns = { '%.git/', 'node_modules/' } } end,
+        { desc = '[F]ind [F]iles (all, including hidden)' }
+      )
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -585,6 +584,7 @@ require('lazy').setup({
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
@@ -846,16 +846,16 @@ require('lazy').setup({
     name = 'rose-pine',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
-      require('rose-pine').setup({
+      require('rose-pine').setup {
         styles = {
           italic = false,
         },
-      })
-      vim.cmd.colorscheme("rose-pine")
-      vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-      vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-      vim.api.nvim_set_hl(0, "Pmenu", { bg = "#1f1d2e" })
-      vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#403d52" })
+      }
+      vim.cmd.colorscheme 'rose-pine'
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'Pmenu', { bg = '#1f1d2e' })
+      vim.api.nvim_set_hl(0, 'PmenuSel', { bg = '#403d52' })
     end,
   },
 
@@ -923,7 +923,8 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python', 'typescript', 'tsx', 'javascript' }
+      local parsers =
+        { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python', 'typescript', 'tsx', 'javascript' }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
