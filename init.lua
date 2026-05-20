@@ -98,6 +98,8 @@ vim.g.have_nerd_font = false
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
+vim.o.winborder = 'rounded'
+
 -- Make line numbers default
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -105,7 +107,7 @@ vim.o.number = true
 vim.o.relativenumber = true
 
 vim.o.wrap = false
-vim.o.colorcolumn = '80'
+vim.o.colorcolumn = '88'
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -173,6 +175,16 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
   command = 'checktime',
 })
 
+-- Markdown-friendly settings: soft wrap, no column guide
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'markdown',
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.colorcolumn = ''
+  end,
+})
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -185,6 +197,28 @@ vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result (centered)' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Prev search result (centered)' })
 
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = '[P]aste without losing clipboard' })
+
+vim.keymap.set('n', '<C-j>', ':m .+1<CR>==', { desc = 'Move line down and indent' })
+vim.keymap.set('n', '<C-k>', ':m .-2<CR>==', { desc = 'Move line up and indent' })
+vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down and indent' })
+vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up and indent' })
+vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Join lines (keep cursor position)' })
+
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Half-page down (centered)' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Half-page up (centered)' })
+
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = '[Y]ank to system clipboard' })
+vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = '[Y]ank line to system clipboard' })
+
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = '[D]elete to black hole register' })
+
+vim.keymap.set({ 'n', 'v' }, 'c', '"_c')
+vim.keymap.set('n', 'C', '"_C')
+
+vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[S]earch & replace word under cursor' })
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -227,10 +261,7 @@ vim.keymap.set('t', 'jk', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+--  Ctrl+hjkl navigation is handled by vim-tmux-navigator (see lua/custom/plugins/vim-tmux-navigator.lua)
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -641,11 +672,10 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         pyright = {},
+        -- jedi_language_server = {},
         -- rust_analyzer = {},
 
         ts_ls = {},
-
-        stylua = {}, -- Used to format Lua code
 
         -- Special Lua Config, as recommended by neovim help docs
         lua_ls = {
@@ -738,6 +768,7 @@ require('lazy').setup({
         html = { 'prettier' },
         json = { 'prettier' },
         python = { 'ruff_format' },
+        markdown = { 'prettier' },
       },
     },
   },
@@ -815,7 +846,10 @@ require('lazy').setup({
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
       },
 
-      cmdline = { enabled = true },
+      cmdline = {
+        enabled = true,
+        completion = { menu = { auto_show = true } },
+      },
 
       sources = {
         default = { 'lsp', 'path', 'snippets' },
@@ -842,20 +876,54 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    'folke/tokyonight.nvim',
+    name = 'tokyonight',
+    priority = 1000,
+    config = function()
+      require('tokyonight').setup {
+        style = 'storm',
+        transparent = true,
+        styles = {
+          sidebars = 'transparent',
+          floats = 'transparent',
+        },
+      }
+      -- Force transparent backgrounds on any colorscheme change
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        callback = function()
+          vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+          vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+          vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'none' })
+          vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
+          vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
+          vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
+        end,
+      })
+      vim.cmd.colorscheme 'tokyonight-storm'
+    end,
+  },
+  {
     'rose-pine/neovim',
     name = 'rose-pine',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    priority = 1000,
     config = function()
       require('rose-pine').setup {
         styles = {
           italic = false,
+          transparency = true,
         },
       }
-      vim.cmd.colorscheme 'rose-pine'
-      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'Pmenu', { bg = '#1f1d2e' })
-      vim.api.nvim_set_hl(0, 'PmenuSel', { bg = '#403d52' })
+    end,
+  },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+    config = function()
+      require('catppuccin').setup {
+        flavour = 'mocha',
+        transparent_background = true,
+      }
     end,
   },
 
@@ -888,18 +956,7 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function() return '%2l:%-2v' end
+      -- Statusline is handled by lualine.nvim (see lua/custom/plugins/lualine.lua)
 
       -- Auto-save and restore sessions per directory
       -- Opens fresh when you pass a file argument (e.g. `nvim somefile.txt`)
@@ -908,8 +965,21 @@ require('lazy').setup({
         autowrite = true,
       }
 
-      -- Move lines/selections with Alt+hjkl
-      require('mini.move').setup()
+      -- Move lines/selections with Ctrl+j/k
+      require('mini.move').setup {
+        mappings = {
+          -- Visual mode
+          left = '',
+          right = '',
+          down = '<C-j>',
+          up = '<C-k>',
+          -- Normal mode
+          line_left = '',
+          line_right = '',
+          line_down = '<C-j>',
+          line_up = '<C-k>',
+        },
+      }
 
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
@@ -998,6 +1068,10 @@ require('lazy').setup({
     },
   },
 })
+
+-- Post-plugin keymaps (set after lazy.setup to avoid being overridden)
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

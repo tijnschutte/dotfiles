@@ -18,6 +18,14 @@ return {
   ---@module 'neo-tree'
   ---@type neotree.Config
   opts = {
+    source_selector = {
+      winbar = true,
+      sources = {
+        { source = 'filesystem', display_name = ' Explorer' },
+        { source = 'buffers', display_name = '󰈚 Buffers' },
+        { source = 'git_status', display_name = '󰊢 Git' },
+      },
+    },
     default_component_configs = {
       diagnostics = {
         symbols = {

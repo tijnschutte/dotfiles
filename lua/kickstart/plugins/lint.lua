@@ -7,12 +7,15 @@ return {
   event = { 'BufReadPre', 'BufNewFile' },
   config = function()
     local lint = require 'lint'
+    lint.linters.markdownlint.args = {
+      '--disable', 'MD013', '--',
+    }
     lint.linters_by_ft = {
       markdown = { 'markdownlint' },
-      javascript = { 'eslint_d' },
-      typescript = { 'eslint_d' },
-      javascriptreact = { 'eslint_d' },
-      typescriptreact = { 'eslint_d' },
+      javascript = { 'eslint' },
+      typescript = { 'eslint' },
+      javascriptreact = { 'eslint' },
+      typescriptreact = { 'eslint' },
       python = { 'ruff' },
     }
 
