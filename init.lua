@@ -164,6 +164,10 @@ vim.o.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
 
+-- Auto-indent settings
+vim.o.autoindent = true
+vim.o.smartindent = true
+
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
@@ -191,6 +195,9 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Exit insert mode' })
 vim.keymap.set('i', 'jk', '<Esc>', { desc = 'Exit insert mode' })
 
+vim.keymap.set('n', 'p', 'p=`]', { desc = 'Paste and re-indent' })
+vim.keymap.set('n', 'P', 'P=`]', { desc = 'Paste before and re-indent' })
+
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { desc = '[P]roject [V]iew (netrw)' })
 
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result (centered)' })
@@ -213,11 +220,18 @@ vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = '[Y]ank line to system clipbo
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = '[D]elete to black hole register' })
 
 vim.keymap.set({ 'n', 'v' }, 'c', '"_c')
+
+vim.keymap.set('v', '>', '>gv', { desc = 'Indent and reselect' })
+vim.keymap.set('v', '<', '<gv', { desc = 'Dedent and reselect' })
 vim.keymap.set('n', 'C', '"_C')
 
 vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[S]earch & replace word under cursor' })
 
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = 'rounded',
+  max_width = 80,
+  max_height = 30,
+})
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
@@ -671,11 +685,54 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        pyright = {
+          before_init = function(_, config)
+            local venv = vim.fn.finddir('.venv', vim.fn.getcwd() .. ';')
+            if venv ~= '' then
+              config.settings.python.pythonPath = venv .. '/bin/python'
+            end
+          end,
+          settings = {
+            python = {
+              pythonPath = '.venv/bin/python',
+            },
+          },
+        },
         -- jedi_language_server = {},
         -- rust_analyzer = {},
 
-        ts_ls = {},
+        vtsls = {
+          settings = {
+            typescript = {
+              preferences = {
+                preferTypeOnlyAutoImports = true,
+              },
+              inlayHints = {
+                parameterNames = { enabled = 'all' },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+              },
+            },
+          },
+        },
+
+        tailwindcss = {
+          settings = {
+            tailwindCSS = {
+              experimental = {
+                classRegex = {
+                  { 'clsx\\(([^)]*)\\)', '(?:\'|"|`)([^(?:\'|"|`)]*)(?:\'|"|`)' },
+                  { 'cn\\(([^)]*)\\)', '(?:\'|"|`)([^(?:\'|"|`)]*)(?:\'|"|`)' },
+                },
+              },
+            },
+          },
+        },
+        eslint = {},
+        jsonls = {},
+        cssls = {},
 
         -- Special Lua Config, as recommended by neovim help docs
         lua_ls = {
@@ -716,7 +773,9 @@ require('lazy').setup({
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        -- You can add other tools here that you want Mason to install
+        'prettier',
+        'stylua',
+        'ruff',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
