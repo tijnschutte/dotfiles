@@ -840,6 +840,7 @@ require('lazy').setup({
         css = { 'prettier' },
         html = { 'prettier' },
         json = { 'prettier' },
+        yaml = { 'prettier' },
         python = { 'ruff_format' },
         markdown = { 'prettier' },
       },
