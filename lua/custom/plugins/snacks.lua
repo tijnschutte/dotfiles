@@ -10,9 +10,11 @@ return {
     -- protocol. Needs Ghostty/kitty/wezterm, and `mmdc` on PATH for mermaid.
     image = {
       enabled = true,
-      -- `svg` is not in the default list; added so exported D2 diagrams
-      -- referenced from markdown render inline (converted via ImageMagick).
-      formats = { 'svg', 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'pdf' },
+      -- Left at the default formats: `svg` is absent on purpose. Conversion
+      -- goes through ImageMagick, whose Homebrew build has no librsvg
+      -- delegate, and its internal renderer dies on the @font-face fonts D2
+      -- embeds. Reference the PNG from markdown instead.
+      formats = { 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'pdf' },
       doc = {
         inline = true,
         max_width = 80,
