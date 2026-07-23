@@ -457,12 +457,20 @@ require('lazy').setup({
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          -- On narrow windows, 'horizontal' just disables the preview and
+          -- stacks a full-height (mostly empty) results pane above the
+          -- prompt. 'flex' switches to 'vertical' instead, keeping a
+          -- preview and a compact results list right above the prompt.
+          layout_strategy = 'flex',
+          layout_config = {
+            flip_columns = 120,
+            vertical = { preview_height = 0.6 },
+          },
+          -- mappings = {
+          --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          -- },
+        },
         pickers = {},
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
@@ -478,7 +486,12 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
+      vim.keymap.set(
+        'n',
+        '<leader>ff',
+        function() builtin.find_files { hidden = true, file_ignore_patterns = { '%.git/' } } end,
+        { desc = '[F]ind [F]iles' }
+      )
       vim.keymap.set(
         'n',
         '<leader>fF',
@@ -488,13 +501,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>fg', function()
-        builtin.live_grep {
-          layout_strategy = 'flex',
-          layout_config = {
-            flip_columns = 120,
-            vertical = { preview_height = 0.6 },
-          },
-        }
+        builtin.live_grep { additional_args = function() return { '--hidden', '--glob=!.git/*' } end }
       end, { desc = '[F]ind by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
