@@ -945,11 +945,9 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  -- These themes only configure themselves; none of them picks the active colorscheme.
+  -- That choice lives once, after lazy.setup at the bottom of this file.
+  {
     'folke/tokyonight.nvim',
     name = 'tokyonight',
     priority = 1000,
@@ -962,18 +960,6 @@ require('lazy').setup({
           floats = 'transparent',
         },
       }
-      -- Force transparent backgrounds on any colorscheme change
-      vim.api.nvim_create_autocmd('ColorScheme', {
-        callback = function()
-          vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-          vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-          vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'none' })
-          vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
-          vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
-          vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
-        end,
-      })
-      vim.cmd.colorscheme 'tokyonight-storm'
     end,
   },
   {
@@ -982,6 +968,7 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       require('rose-pine').setup {
+        variant = 'moon',
         styles = {
           italic = false,
           transparency = true,
@@ -1146,6 +1133,26 @@ require('lazy').setup({
 -- Post-plugin keymaps (set after lazy.setup to avoid being overridden)
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
+
+-- Keep backgrounds transparent so the terminal shows through, whichever theme is active.
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = function()
+    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
+    -- Float popup titles (e.g. neo-tree's "Enter name for new file…" prompt) default
+    -- to a dim gray that's illegible over the transparent background. Brighten + bold them.
+    vim.api.nvim_set_hl(0, 'NeoTreeFloatTitle', { fg = '#c0caf5', bold = true, bg = 'none' })
+    vim.api.nvim_set_hl(0, 'FloatTitle', { fg = '#c0caf5', bold = true, bg = 'none' })
+  end,
+})
+
+-- The active colorscheme. Set here, after lazy.setup, so every theme's setup() has
+-- already run. Swap this one string: 'tokyonight-storm' | 'rose-pine-moon' | 'catppuccin'.
+vim.cmd.colorscheme 'tokyonight-storm'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
