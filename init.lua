@@ -173,6 +173,10 @@ vim.o.smartindent = true
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Default border for every floating window, including LSP hover and signature help.
+-- Replaces per-handler `vim.lsp.with` borders, which were removed in Neovim 0.12.
+vim.o.winborder = 'rounded'
+
 -- Auto-reload files changed outside of Neovim (e.g. by Claude Code, git, etc.)
 vim.o.autoread = true
 vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
@@ -227,12 +231,9 @@ vim.keymap.set('n', 'C', '"_C')
 
 vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[S]earch & replace word under cursor' })
 
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = 'rounded',
-  max_width = 80,
-  max_height = 30,
-})
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
+-- Neovim maps `K` to hover by default; remap it only to cap the popup size.
+-- The border comes from 'winborder' above.
+vim.keymap.set('n', 'K', function() vim.lsp.buf.hover { max_width = 80, max_height = 30 } end, { desc = 'LSP hover' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -251,7 +252,10 @@ vim.diagnostic.config {
   virtual_lines = false, -- Text shows up underneath the line, with virtual lines
 
   -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
-  jump = { float = true },
+  -- (`jump.float` is deprecated; `on_jump` is the supported form.)
+  jump = {
+    on_jump = function(_, bufnr) vim.diagnostic.open_float { bufnr = bufnr, scope = 'cursor', focus = false } end,
+  },
 }
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
