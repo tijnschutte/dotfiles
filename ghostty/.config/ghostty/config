@@ -1,0 +1,34 @@
+# Patched build, so the Nerd Font icon range (nvim devicons, prompt icons) comes from
+# this face rather than a fallback with unrelated metrics. Powerline caps and box-drawing
+# need no font coverage either way: Ghostty renders those as internal sprites.
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 15
+
+# Leading. Ghostty packs lines with zero gap, which turns wrapped prose into a
+# block; the eye needs a gutter to find the next line's start.
+adjust-cell-height = 8%
+
+# Gamma-correct blending. `native` matches macOS' gamma-incorrect compositing,
+# which makes light-on-dark glyphs bloom and bold text smear together.
+alpha-blending = linear-corrected
+
+# Contrast floor for the dim end of the palette (Rose Pine muted/subtle, nvim
+# line numbers), which the background transparency below washes out.
+minimum-contrast = 1.1
+macos-titlebar-style = hidden
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+theme = Rose Pine
+background-opacity = 0.96
+background-blur = 20
+
+# Native fullscreen disables background opacity, taking the transparency with it.
+macos-non-native-fullscreen = padded-notch
+macos-window-shadow = false
+mouse-hide-while-typing = true
+cursor-style = bar
+copy-on-select = clipboard
+shell-integration-features = ssh-terminfo
+macos-option-as-alt = true
+confirm-close-surface = false
