@@ -1,0 +1,209 @@
+#!/bin/bash
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+source "$CONFIG_DIR/colors.sh"
+
+# ── Seed initial CPU temperature cache ──
+mkdir -p /tmp/smctemp
+/opt/homebrew/bin/smctemp -c -i25 -n180 -f &
+
+# ── Reusable Property Arrays ──
+bar=(
+  position=top
+  height=40
+  blur_radius=50
+  color=$BAR_BG
+  corner_radius=12
+  margin=8
+  y_offset=4
+  notch_width=0
+)
+
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="Hack Nerd Font:Bold:17.0"
+  label.font="Hack Nerd Font:Bold:14.0"
+  icon.color=$FG
+  label.color=$FG
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+
+div=(
+  icon=│
+  icon.font="Hack Nerd Font:Bold:16.0"
+  icon.color=$COMMENT
+  icon.padding_left=6
+  icon.padding_right=6
+  label.drawing=off
+  background.drawing=off
+  padding_left=0
+  padding_right=0
+)
+
+space=(
+  icon.padding_left=8
+  icon.padding_right=8
+  background.color=0x40292e42
+  background.corner_radius=8
+  background.height=28
+  background.drawing=off
+  label.font="sketchybar-app-font:Regular:14.0"
+  label.padding_right=8
+  label.y_offset=-1
+  label.drawing=off
+)
+
+bracket=(
+  background.color=$BRACKET_BG
+  background.corner_radius=10
+  background.height=30
+  background.border_color=$COMMENT
+  background.border_width=1
+)
+
+# ── Bar + Defaults ──
+sketchybar --bar "${bar[@]}" --default "${default[@]}"
+
+# ── Events: per-workspace (only 2 items update per switch instead of 10) ──
+args=()
+for sid in 1 2 3 4 5 6 7 8 9 10; do
+  args+=(--add event aerospace_workspace_change_"$sid")
+done
+sketchybar "${args[@]}"
+
+# ── Left: Workspaces ── (each item subscribes to its own event)
+args=()
+for sid in 1 2 3 4 5 6 7 8 9 10; do
+  args+=(--add item space."$sid" left
+         --subscribe space."$sid" aerospace_workspace_change_"$sid"
+         --set space."$sid" "${space[@]}"
+           icon="$sid"
+           script="$PLUGIN_DIR/aerospace.sh $sid"
+           click_script="aerospace workspace $sid")
+done
+sketchybar "${args[@]}"
+
+# ── Left: Front App (hidden relay — triggers focused workspace update on app change) ──
+sketchybar --add item front_app left                                           \
+           --subscribe front_app front_app_switched                            \
+           --set front_app drawing=off                                         \
+                           script="$PLUGIN_DIR/front_app_relay.sh"
+
+# ── Right: Clock, Volume, Battery, WireGuard (with dividers) ──
+sketchybar --add item clock right                                              \
+           --set clock update_freq=10                                          \
+                       icon=                                                  \
+                       icon.color=$CYAN                                        \
+                       script="$PLUGIN_DIR/clock.sh"                           \
+                                                                               \
+           --add item div_r1 right                                             \
+           --set div_r1 "${div[@]}"                                            \
+                                                                               \
+           --add item volume right                                             \
+           --set volume icon.color=$MAGENTA                                    \
+                        script="$PLUGIN_DIR/volume.sh"                         \
+           --subscribe volume volume_change                                    \
+                                                                               \
+           --add item div_r2 right                                             \
+           --set div_r2 "${div[@]}"                                            \
+                                                                               \
+           --add item battery right                                            \
+           --set battery update_freq=120                                       \
+                         icon.color=$GREEN                                     \
+                         script="$PLUGIN_DIR/battery.sh"                       \
+           --subscribe battery system_woke power_source_change                 \
+                                                                               \
+           --add item div_r3 right                                             \
+           --set div_r3 "${div[@]}"                                            \
+                                                                               \
+           --add item ip_address right                                          \
+           --subscribe ip_address wifi_change                                  \
+           --set ip_address update_freq=10                                     \
+                            icon=󰖪                                             \
+                            icon.color=$COMMENT                                \
+                            label=""                                           \
+                            script="$PLUGIN_DIR/ip_address.sh"                 \
+                                                                               \
+           --add item vpn right                                                \
+           --set vpn update_freq=60                                            \
+                     icon=󰿆                                                    \
+                     icon.color=$RED                                           \
+                     label=""                                                  \
+                     script="$PLUGIN_DIR/vpn.sh"                              \
+                     click_script="sketchybar --set vpn popup.drawing=toggle"  \
+                     popup.background.color=$BG_HIGHLIGHT                      \
+                     popup.background.corner_radius=10                         \
+                     popup.background.border_color=$COMMENT                    \
+                     popup.background.border_width=1                               \
+                                                                               \
+           --add item spacer_rg right                                          \
+           --set spacer_rg width=12                                            \
+                           background.drawing=off                              \
+                           icon.drawing=off                                    \
+                           label.drawing=off
+
+# ── Right: System Stats ──
+sketchybar --add item temp right                                               \
+           --set temp icon="TMP"                                               \
+                      icon.color=$GREEN                                        \
+                      label.color=$GREEN                                       \
+                      update_freq=15                                           \
+                      script="$PLUGIN_DIR/temperature.sh"                      \
+                                                                               \
+           --add item div_s1 right                                             \
+           --set div_s1 "${div[@]}"                                            \
+                                                                               \
+           --add item cpu right                                                \
+           --set cpu icon="CPU"                                                \
+                     icon.color=$BLUE                                          \
+                     label.color=$BLUE                                         \
+                     update_freq=15                                            \
+                     script="$PLUGIN_DIR/cpu.sh"                               \
+                     click_script="sketchybar --set cpu popup.drawing=toggle"  \
+                     popup.background.color=$BG_HIGHLIGHT                      \
+                     popup.background.corner_radius=10                         \
+                     popup.background.border_color=$COMMENT                    \
+                     popup.background.border_width=1                           \
+                                                                               \
+           --add item div_s2 right                                             \
+           --set div_s2 "${div[@]}"                                            \
+                                                                               \
+           --add item memory right                                             \
+           --set memory icon="RAM"                                             \
+                        icon.color=$GREEN                                      \
+                        label.color=$GREEN                                     \
+                        update_freq=15                                         \
+                        script="$PLUGIN_DIR/memory.sh"                         \
+                        click_script="sketchybar --set memory popup.drawing=toggle" \
+                        popup.background.color=$BG_HIGHLIGHT                   \
+                        popup.background.corner_radius=10                      \
+                        popup.background.border_color=$COMMENT                 \
+                        popup.background.border_width=1                        \
+                                                                               \
+           --add item div_s3 right                                             \
+           --set div_s3 "${div[@]}"                                            \
+                                                                               \
+           --add item disk right                                               \
+           --set disk icon="DSK"                                               \
+                      icon.color=$YELLOW                                       \
+                      label.color=$YELLOW                                      \
+                      update_freq=120                                          \
+                      script="$PLUGIN_DIR/disk.sh"
+
+# ── Bracket Groups ──
+sketchybar --add bracket left_group '/space\..*/' front_app                     \
+           --set left_group "${bracket[@]}"                                    \
+                                                                               \
+           --add bracket right_group clock volume battery ip_address vpn        \
+           --set right_group "${bracket[@]}"                                   \
+                                                                               \
+           --add bracket graphs_group temp div_s1 cpu div_s2 memory div_s3 disk                     \
+           --set graphs_group "${bracket[@]}"
+
+# ── Initialize ──
+sketchybar --update

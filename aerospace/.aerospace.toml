@@ -1,0 +1,163 @@
+# AeroSpace Tiling Window Manager Configuration
+# Reload: alt-shift-c
+
+# General settings
+start-at-login = true
+
+after-login-command = []
+
+after-startup-command = [
+  'layout tiles horizontal',
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
+]
+
+# Notify sketchybar on workspace change (per-workspace events — only 2 items update instead of 10)
+exec-on-workspace-change = ['/bin/bash', '-c',
+  'NON_EMPTY="$(timeout 1 aerospace list-workspaces --monitor all --empty no 2>/dev/null | tr "\n" " " || true)"; sketchybar --trigger aerospace_workspace_change_$AEROSPACE_FOCUSED_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null & sketchybar --trigger aerospace_workspace_change_$AEROSPACE_PREV_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null &'
+]
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'horizontal'
+
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Gaps
+[gaps]
+outer.left = 8
+outer.bottom = 8
+outer.top = 8
+outer.right = 8
+inner.horizontal = 8
+inner.vertical = 8
+
+# Main mode keybindings
+[mode.main.binding]
+
+# Focus (vim hjkl)
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# Move windows
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# Switch to workspace
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 10'
+
+# Move window to workspace (trigger both target + focused workspace icon updates)
+alt-shift-1 = ['move-node-to-workspace 1', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_1 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-2 = ['move-node-to-workspace 2', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_2 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-3 = ['move-node-to-workspace 3', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_3 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-4 = ['move-node-to-workspace 4', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_4 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-5 = ['move-node-to-workspace 5', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_5 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-6 = ['move-node-to-workspace 6', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_6 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-7 = ['move-node-to-workspace 7', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_7 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-8 = ['move-node-to-workspace 8', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_8 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-9 = ['move-node-to-workspace 9', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_9 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-0 = ['move-node-to-workspace 10', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_10 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+
+# Layout
+alt-slash = 'layout tiles horizontal vertical'
+alt-f = 'fullscreen'
+alt-shift-f = 'layout floating tiling'
+
+# Multi-monitor
+alt-tab = 'focus-monitor next'
+alt-shift-tab = 'focus-monitor prev'
+alt-shift-ctrl-h = 'move-node-to-monitor left'
+alt-shift-ctrl-l = 'move-node-to-monitor right'
+
+# Utility
+alt-shift-c = 'reload-config'
+alt-shift-semicolon = 'flatten-workspace-tree'
+alt-shift-q = 'close'
+
+# Enter resize mode
+alt-r = 'mode resize'
+
+# Enter open (app launcher) mode
+alt-o = 'mode open'
+
+# Resize mode
+[mode.resize.binding]
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
+esc = 'mode main'
+
+# Open (app launcher) mode
+[mode.open.binding]
+g = ['exec-and-forget open -a Ghostty', 'mode main']
+b = ['exec-and-forget open -a "Google Chrome"', 'mode main']
+m = ['exec-and-forget open -a Mattermost', 'mode main']
+c = ['exec-and-forget open -a "Visual Studio Code"', 'mode main']
+f = ['exec-and-forget open -a Finder', 'mode main']
+s = ['exec-and-forget open -a Spotify', 'mode main']
+esc = 'mode main'
+
+# Workspace-to-monitor assignment
+[workspace-to-monitor-force-assignment]
+10 = 'secondary'  # Always assign workspace 10 to the connected external monitor
+
+# App-specific rules: float system popups
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+if.window-title-regex-substring = 'Info$'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.calculator'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.archiveutility'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Shortcuts'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.AirDrop'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ScreenSharing'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ActivityMonitor'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.keychainaccess'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ColorSyncUtility'
+run = 'layout floating'
