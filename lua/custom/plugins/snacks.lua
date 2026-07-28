@@ -4,8 +4,20 @@ return {
   'folke/snacks.nvim',
   priority = 1000,
   lazy = false,
+  keys = {
+    { '<leader>z', function() Snacks.zen() end, desc = 'Toggle [Z]en (reading width)' },
+  },
   ---@type snacks.Config
   opts = {
+    -- Soft wrap alone still breaks at the window edge, which on a full-width pane is
+    -- ~210 columns — around three times the length the eye tracks reliably on the
+    -- return sweep. Zen centres the buffer at a readable measure instead.
+    zen = {
+      -- `dim` spotlights the current scope, which fights reading a document whole.
+      toggles = { dim = false },
+      win = { width = 90 },
+    },
+
     -- Inline images, LaTeX math and mermaid diagrams via the Kitty graphics
     -- protocol. Needs Ghostty/kitty/wezterm, and `mmdc` on PATH for mermaid.
     image = {
