@@ -91,7 +91,9 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+-- (Ghostty runs JetBrainsMono Nerd Font Mono -- see ghostty/.config/ghostty/config).
+-- Gates nvim-web-devicons, which-key's icon set and render-markdown's heading icons.
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
