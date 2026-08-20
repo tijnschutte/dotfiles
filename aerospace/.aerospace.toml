@@ -109,7 +109,6 @@ b = ['exec-and-forget open -a "Google Chrome"', 'mode main']
 m = ['exec-and-forget open -a Mattermost', 'mode main']
 c = ['exec-and-forget open -a "Visual Studio Code"', 'mode main']
 f = ['exec-and-forget open -a Finder', 'mode main']
-s = ['exec-and-forget open -a Spotify', 'mode main']
 esc = 'mode main'
 
 # Workspace-to-monitor assignment
