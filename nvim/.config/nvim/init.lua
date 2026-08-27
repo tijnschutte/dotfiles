@@ -231,6 +231,8 @@ vim.keymap.set('v', '>', '>gv', { desc = 'Indent and reselect' })
 vim.keymap.set('v', '<', '<gv', { desc = 'Dedent and reselect' })
 vim.keymap.set('n', 'C', '"_C')
 
+vim.keymap.set('n', '<leader>a', 'ggVG', { desc = 'Select [A]ll' })
+
 vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[S]earch & replace word under cursor' })
 
 -- Neovim maps `K` to hover by default; remap it only to cap the popup size.
@@ -1025,13 +1027,6 @@ require('lazy').setup({
 
       -- Statusline is handled by lualine.nvim (see lua/custom/plugins/lualine.lua)
 
-      -- Auto-save and restore sessions per directory
-      -- Opens fresh when you pass a file argument (e.g. `nvim somefile.txt`)
-      require('mini.sessions').setup {
-        autoread = true,
-        autowrite = true,
-      }
-
       -- Move lines/selections with Ctrl+j/k
       require('mini.move').setup {
         mappings = {
@@ -1047,6 +1042,43 @@ require('lazy').setup({
           line_up = '<C-k>',
         },
       }
+
+      -- Operators that take a motion, like built-in `d` or `y`
+      --
+      -- - gpiw - [G]o [P]aste over [I]nner [W]ord (replace with register)
+      -- - cxiw - mark a word, then `cxiw` on a second word swaps the two
+      -- - gmm  - duplicate the line below itself
+      -- - gsip - sort the lines in the paragraph
+      -- - g=   - evaluate the text as Lua and substitute the result
+      --
+      -- Two defaults are remapped: `gr` is the LSP prefix here (grr/gri/grn),
+      -- and `gx` is the built-in URL opener, which markdown links rely on.
+      require('mini.operators').setup {
+        replace = { prefix = 'gp' },
+        exchange = { prefix = 'cx' },
+      }
+
+      -- Toggle an argument list between one line and one-per-line with `gS`
+      require('mini.splitjoin').setup()
+
+      -- Align by a delimiter: `gaip=` aligns the paragraph on `=`
+      -- `gA` does the same with a live preview of the result
+      require('mini.align').setup()
+
+      -- Paired `[`/`]` navigation over buffers, quickfix, diagnostics, indent,
+      -- conflict markers, oldfiles, undo states and more. See `:h mini.bracketed`
+      require('mini.bracketed').setup {
+        -- `[c`/`]c` is gitsigns hunk navigation (lua/kickstart/plugins/gitsigns.lua)
+        comment = { suffix = '' },
+      }
+
+      -- Highlight the word under the cursor after a short delay
+      require('mini.cursorword').setup()
+
+      -- Highlight trailing whitespace; trim it on demand rather than on save,
+      -- since conform.nvim owns what happens to a buffer at write time
+      require('mini.trailspace').setup()
+      vim.keymap.set('n', '<leader>tw', require('mini.trailspace').trim, { desc = '[T]rim trailing [W]hitespace' })
 
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
