@@ -364,6 +364,8 @@ require('lazy').setup({
         topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
         changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
       },
+      numhl = true,
+      linehl = true,
     },
   },
 
