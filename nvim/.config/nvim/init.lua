@@ -365,7 +365,7 @@ require('lazy').setup({
         changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
       },
       numhl = true,
-      linehl = true,
+      linehl = false,
     },
   },
 

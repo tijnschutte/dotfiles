@@ -53,6 +53,7 @@ return {
       -- Toggles
       map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
       map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
+      map('n', '<leader>tl', gitsigns.toggle_linehl, { desc = '[T]oggle git changed [l]ine highlight' })
     end,
   },
 }
