@@ -20,7 +20,9 @@ window-padding-x = 10
 window-padding-y = 10
 window-padding-balance = true
 theme = Rose Pine
-background-opacity = 0.96
+# Darker than Rose Pine's default #191724, same hue.
+background = 100e18
+background-opacity = 1.0
 background-blur = 20
 
 # Native fullscreen disables background opacity, taking the transparency with it.
