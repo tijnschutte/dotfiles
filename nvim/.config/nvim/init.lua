@@ -496,12 +496,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set(
-        'n',
-        '<leader>ff',
-        function() builtin.find_files { hidden = true, file_ignore_patterns = { '%.git/' } } end,
-        { desc = '[F]ind [F]iles' }
-      )
+      vim.keymap.set('n', '<leader>ff', function() builtin.find_files { hidden = true, file_ignore_patterns = { '%.git/' } } end, { desc = '[F]ind [F]iles' })
       vim.keymap.set(
         'n',
         '<leader>fF',
@@ -712,9 +707,7 @@ require('lazy').setup({
         pyright = {
           before_init = function(_, config)
             local venv = vim.fn.finddir('.venv', vim.fn.getcwd() .. ';')
-            if venv ~= '' then
-              config.settings.python.pythonPath = venv .. '/bin/python'
-            end
+            if venv ~= '' then config.settings.python.pythonPath = venv .. '/bin/python' end
           end,
           settings = {
             python = {
@@ -1094,8 +1087,24 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      local parsers =
-        { 'bash', 'c', 'diff', 'html', 'json', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python', 'typescript', 'tsx', 'javascript' }
+      local parsers = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'json',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'python',
+        'typescript',
+        'tsx',
+        'javascript',
+      }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
