@@ -3,6 +3,7 @@
 # need no font coverage either way: Ghostty renders those as internal sprites.
 font-family = JetBrainsMono Nerd Font Mono
 font-size = 15
+font-thicken = true
 
 # Leading. Ghostty packs lines with zero gap, which turns wrapped prose into a
 # block; the eye needs a gutter to find the next line's start.
