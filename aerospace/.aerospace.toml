@@ -11,9 +11,10 @@ after-startup-command = [
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
 ]
 
-# Notify sketchybar on workspace change (per-workspace events — only 2 items update instead of 10)
+# On workspace change: pull the Wispr Flow overlay to the focused workspace (AeroSpace has no sticky windows),
+# then notify sketchybar (per-workspace events — only 2 items update instead of 10)
 exec-on-workspace-change = ['/bin/bash', '-c',
-  'NON_EMPTY="$(timeout 1 aerospace list-workspaces --monitor all --empty no 2>/dev/null | tr "\n" " " || true)"; sketchybar --trigger aerospace_workspace_change_$AEROSPACE_FOCUSED_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null & sketchybar --trigger aerospace_workspace_change_$AEROSPACE_PREV_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null &'
+  'for id in $(aerospace list-windows --monitor all --app-bundle-id com.electron.wispr-flow --format "%{window-id}"); do aerospace move-node-to-workspace --window-id "$id" "$AEROSPACE_FOCUSED_WORKSPACE"; done; NON_EMPTY="$(timeout 1 aerospace list-workspaces --monitor all --empty no 2>/dev/null | tr "\n" " " || true)"; sketchybar --trigger aerospace_workspace_change_$AEROSPACE_FOCUSED_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null & sketchybar --trigger aerospace_workspace_change_$AEROSPACE_PREV_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null &'
 ]
 
 enable-normalization-flatten-containers = true
