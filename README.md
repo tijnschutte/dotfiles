@@ -11,16 +11,17 @@ file's path here states where it lands — no install script decides that.
 | `tmux` | `~/.tmux.conf` | multiplexer |
 | `sketchybar` | `~/.config/sketchybar` | menu bar |
 | `aerospace` | `~/.aerospace.toml` | tiling window manager |
+| `starship` | `~/.config/starship.toml` | shell prompt |
 
 ## Install
 
 ```sh
-brew install stow neovim tmux felixkratz/formulae/sketchybar felixkratz/formulae/borders
+brew install stow neovim tmux starship felixkratz/formulae/sketchybar felixkratz/formulae/borders
 brew install --cask ghostty nikitabobko/tap/aerospace font-jetbrains-mono-nerd-font
 
 git clone git@github.com:tijnschutte/dotfiles.git
 cd dotfiles
-stow -t ~ nvim ghostty tmux sketchybar aerospace
+stow -t ~ nvim ghostty tmux sketchybar aerospace starship
 ```
 
 Stow symlinks rather than copies, so **the clone location is permanent** — moving
