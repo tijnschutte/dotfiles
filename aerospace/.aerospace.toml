@@ -8,7 +8,7 @@ after-login-command = []
 
 after-startup-command = [
   'layout tiles horizontal',
-  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
+  'exec-and-forget borders active_color=0xffa5adcb inactive_color=0xff494d64 width=2.0'
 ]
 
 # On workspace change: pull the Wispr Flow overlay to the focused workspace (AeroSpace has no sticky windows),
