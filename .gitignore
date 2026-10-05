@@ -4,3 +4,6 @@
 tags
 spell/
 .luarc.json
+
+# Secrets live in ~/.zshrc.local, sourced from zsh/.zshrc
+.zshrc.local

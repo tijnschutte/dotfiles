@@ -12,22 +12,35 @@ file's path here states where it lands — no install script decides that.
 | `sketchybar` | `~/.config/sketchybar` | menu bar |
 | `aerospace` | `~/.aerospace.toml` | tiling window manager |
 | `starship` | `~/.config/starship.toml` | shell prompt |
+| `zsh` | `~/.zshrc` | shell, Oh My Zsh based |
 
 ## Install
 
 ```sh
-brew install stow neovim tmux starship felixkratz/formulae/sketchybar felixkratz/formulae/borders
+brew install stow neovim tmux starship eza zoxide felixkratz/formulae/sketchybar felixkratz/formulae/borders
 brew install --cask ghostty nikitabobko/tap/aerospace font-jetbrains-mono-nerd-font
 
 git clone git@github.com:tijnschutte/dotfiles.git
 cd dotfiles
-stow -t ~ nvim ghostty tmux sketchybar aerospace starship
+stow -t ~ nvim ghostty tmux sketchybar aerospace starship zsh
 ```
 
 Stow symlinks rather than copies, so **the clone location is permanent** — moving
 the repo breaks every link. Re-run `stow` from the new path to repair.
 
 Individual packages work on their own: `stow -t ~ nvim`.
+
+`zsh/.zshrc` expects Oh My Zsh plus two custom plugins, which are git clones
+rather than stowed files:
+
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+```
+
+Secrets (API tokens) go in `~/.zshrc.local`, which `.zshrc` sources if present
+and which is never committed.
 
 ## Notes
 
