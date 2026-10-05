@@ -703,7 +703,16 @@ require('lazy').setup({
       ---@type table<string, vim.lsp.Config>
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {
+          settings = {
+            gopls = {
+              gofumpt = true,
+              staticcheck = true,
+              usePlaceholders = true,
+              analyses = { unusedparams = true, shadow = true },
+            },
+          },
+        },
         pyright = {
           before_init = function(_, config)
             local venv = vim.fn.finddir('.venv', vim.fn.getcwd() .. ';')
@@ -793,6 +802,8 @@ require('lazy').setup({
         'prettier',
         'stylua',
         'ruff',
+        'goimports',
+        'gofumpt',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -845,6 +856,7 @@ require('lazy').setup({
         json = { 'prettier' },
         yaml = { 'prettier' },
         python = { 'ruff_format' },
+        go = { 'goimports', 'gofumpt' },
         markdown = { 'prettier' },
       },
     },
@@ -1104,6 +1116,10 @@ require('lazy').setup({
         'typescript',
         'tsx',
         'javascript',
+        'go',
+        'gomod',
+        'gosum',
+        'gowork',
       }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
@@ -1140,7 +1156,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
