@@ -2,22 +2,23 @@
 
 source "$CONFIG_DIR/colors.sh"
 source "$CONFIG_DIR/plugins/icon_map.sh"
+source "$CONFIG_DIR/plugins/aerospace_cli.sh"
 
 WORKSPACE_ID="$1"
 
 # Always query fresh to avoid race conditions during rapid switching
-FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused 2>/dev/null)
+FOCUSED_WORKSPACE=$(aero list-workspaces --focused 2>/dev/null)
 
 # Resolve non-empty workspaces: env var from trigger, or query aerospace
 if [ -z "$NON_EMPTY" ]; then
-  NON_EMPTY=$(aerospace list-workspaces --monitor all --empty no 2>/dev/null | tr '\n' ' ')
+  NON_EMPTY=$(aero list-workspaces --monitor all --empty no 2>/dev/null | tr '\n' ' ')
 fi
 
 # Build app icon strip for non-empty workspaces
 build_icon_strip() {
   local ws="$1"
   local apps strip=""
-  apps=$(aerospace list-windows --workspace "$ws" 2>/dev/null | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
+  apps=$(aero list-windows --workspace "$ws" 2>/dev/null | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
   if [ -n "$apps" ]; then
     while IFS= read -r APP; do
       APP="${APP#"${APP%%[![:space:]]*}"}"

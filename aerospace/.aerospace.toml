@@ -11,11 +11,8 @@ after-startup-command = [
   'exec-and-forget borders active_color=0xffa5adcb inactive_color=0xff494d64 width=2.0'
 ]
 
-# On workspace change: pull the Wispr Flow overlay to the focused workspace (AeroSpace has no sticky windows),
-# then notify sketchybar (per-workspace events — only 2 items update instead of 10)
-exec-on-workspace-change = ['/bin/bash', '-c',
-  'for id in $(aerospace list-windows --monitor all --app-bundle-id com.electron.wispr-flow --format "%{window-id}"); do aerospace move-node-to-workspace --window-id "$id" "$AEROSPACE_FOCUSED_WORKSPACE"; done; NON_EMPTY="$(timeout 1 aerospace list-workspaces --monitor all --empty no 2>/dev/null | tr "\n" " " || true)"; sketchybar --trigger aerospace_workspace_change_$AEROSPACE_FOCUSED_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null & sketchybar --trigger aerospace_workspace_change_$AEROSPACE_PREV_WORKSPACE FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE NON_EMPTY="$NON_EMPTY" 2>/dev/null &'
-]
+# On workspace change: see ~/.config/aerospace/on-workspace-change.sh
+exec-on-workspace-change = ['/bin/bash', '-c', '"$HOME"/.config/aerospace/on-workspace-change.sh']
 
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
@@ -62,16 +59,16 @@ alt-9 = 'workspace 9'
 alt-0 = 'workspace 10'
 
 # Move window to workspace (trigger both target + focused workspace icon updates)
-alt-shift-1 = ['move-node-to-workspace 1', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_1 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-2 = ['move-node-to-workspace 2', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_2 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-3 = ['move-node-to-workspace 3', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_3 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-4 = ['move-node-to-workspace 4', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_4 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-5 = ['move-node-to-workspace 5', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_5 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-6 = ['move-node-to-workspace 6', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_6 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-7 = ['move-node-to-workspace 7', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_7 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-8 = ['move-node-to-workspace 8', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_8 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-9 = ['move-node-to-workspace 9', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_9 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
-alt-shift-0 = ['move-node-to-workspace 10', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_10 && sketchybar --trigger aerospace_workspace_change_$(aerospace list-workspaces --focused)']
+alt-shift-1 = ['move-node-to-workspace 1', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_1 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-2 = ['move-node-to-workspace 2', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_2 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-3 = ['move-node-to-workspace 3', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_3 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-4 = ['move-node-to-workspace 4', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_4 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-5 = ['move-node-to-workspace 5', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_5 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-6 = ['move-node-to-workspace 6', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_6 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-7 = ['move-node-to-workspace 7', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_7 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-8 = ['move-node-to-workspace 8', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_8 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-9 = ['move-node-to-workspace 9', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_9 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
+alt-shift-0 = ['move-node-to-workspace 10', 'exec-and-forget sketchybar --trigger aerospace_workspace_change_10 && sketchybar --trigger aerospace_workspace_change_$(/usr/bin/perl -e "alarm shift; exec @ARGV" 2 aerospace list-workspaces --focused)']
 
 # Layout
 alt-slash = 'layout tiles horizontal vertical'
