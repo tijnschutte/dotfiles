@@ -7,11 +7,11 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 # Minimal two-liner:
-#   dotfiles on  master (env)
+#   dotfiles on  master [!?] (env)
 #   ❯
 # Modules not listed here never render, so new tools stay off the line until
 # added explicitly.
-format = "$directory$git_branch$conda$python$cmd_duration$line_break$character"
+format = "$directory$git_branch$git_status$conda$python$cmd_duration$line_break$character"
 add_newline = true
 
 [character]
