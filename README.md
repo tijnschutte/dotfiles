@@ -8,7 +8,7 @@ file's path here states where it lands — no install script decides that.
 |---|---|---|
 | `nvim` | `~/.config/nvim` | Neovim, kickstart-derived |
 | `ghostty` | `~/.config/ghostty` | terminal |
-| `tmux` | `~/.tmux.conf` | multiplexer |
+| `tmux` | `~/.tmux.conf`, `~/.tmux/words` | multiplexer, random window names |
 | `sketchybar` | `~/.config/sketchybar` | menu bar |
 | `aerospace` | `~/.aerospace.toml` | tiling window manager |
 | `starship` | `~/.config/starship.toml` | shell prompt |
