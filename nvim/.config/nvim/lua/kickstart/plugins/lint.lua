@@ -11,11 +11,9 @@ return {
       '--disable', 'MD013', '--',
     }
     lint.linters_by_ft = {
+      -- JS/TS is linted by the eslint LSP (init.lua), which stays quiet in
+      -- projects without eslint instead of erroring on every BufEnter.
       markdown = { 'markdownlint' },
-      javascript = { 'eslint' },
-      typescript = { 'eslint' },
-      javascriptreact = { 'eslint' },
-      typescriptreact = { 'eslint' },
       python = { 'ruff' },
     }
 
