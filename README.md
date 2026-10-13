@@ -13,16 +13,17 @@ file's path here states where it lands — no install script decides that.
 | `aerospace` | `~/.aerospace.toml`, `~/.config/aerospace/` | tiling window manager, workspace-change hook |
 | `starship` | `~/.config/starship.toml` | shell prompt |
 | `zsh` | `~/.zshrc` | shell, Oh My Zsh based |
+| `zed` | `~/.config/zed` | editor, Vim mode; whole directory is linked because Zed saves by rename, which would replace a file symlink |
 
 ## Install
 
 ```sh
 brew install stow neovim tmux starship eza zoxide felixkratz/formulae/sketchybar felixkratz/formulae/borders
-brew install --cask ghostty nikitabobko/tap/aerospace font-jetbrains-mono-nerd-font
+brew install --cask ghostty zed nikitabobko/tap/aerospace font-jetbrains-mono-nerd-font
 
 git clone git@github.com:tijnschutte/dotfiles.git
 cd dotfiles
-stow -t ~ nvim ghostty tmux sketchybar aerospace starship zsh
+stow -t ~ nvim ghostty tmux sketchybar aerospace starship zsh zed
 ```
 
 Stow symlinks rather than copies, so **the clone location is permanent** — moving

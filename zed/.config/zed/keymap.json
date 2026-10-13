@@ -1,0 +1,57 @@
+// Zed key bindings, translated from ~/.config/nvim/init.lua.
+// Leader is space.
+[
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "j j": "vim::NormalBefore",
+      "j k": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "n": ["workspace::SendKeystrokes", "n z z"],
+      "shift-n": ["workspace::SendKeystrokes", "shift-n z z"],
+      "ctrl-d": ["workspace::SendKeystrokes", "ctrl-d z z"],
+      "ctrl-u": ["workspace::SendKeystrokes", "ctrl-u z z"],
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight"
+    }
+  },
+  {
+    "context": "vim_mode == normal || vim_mode == visual",
+    "bindings": {
+      "ctrl-j": "editor::MoveLineDown",
+      "ctrl-k": "editor::MoveLineUp"
+    }
+  },
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "space space": "tab_switcher::Toggle",
+      "space f f": "file_finder::Toggle",
+      "space s f": "file_finder::Toggle",
+      "space f g": "pane::DeploySearch",
+      "space g s": "git_panel::ToggleFocus",
+      "space g d": "git::Diff",
+      "space r n": "editor::Rename",
+      "\\": "pane::RevealInProjectPanel"
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-j": "editor::MoveLineDown",
+      "shift-k": "editor::MoveLineUp",
+      ">": ["workspace::SendKeystrokes", "> g v"],
+      "<": ["workspace::SendKeystrokes", "< g v"]
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "\\": "workspace::ToggleLeftDock"
+    }
+  }
+]

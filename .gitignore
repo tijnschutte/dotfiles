@@ -7,3 +7,7 @@ spell/
 
 # Secrets live in ~/.zshrc.local, sourced from zsh/.zshrc
 .zshrc.local
+
+# Zed runtime state; the stowed directory symlink puts it inside the repo
+zed/.config/zed/prompts/
+zed/.config/zed/themes/
