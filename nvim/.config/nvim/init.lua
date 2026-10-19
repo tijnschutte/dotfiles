@@ -211,10 +211,6 @@ vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Prev search result (centered)' })
 
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = '[P]aste without losing clipboard' })
 
-vim.keymap.set('n', '<C-j>', ':m .+1<CR>==', { desc = 'Move line down and indent' })
-vim.keymap.set('n', '<C-k>', ':m .-2<CR>==', { desc = 'Move line up and indent' })
-vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down and indent' })
-vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up and indent' })
 vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Join lines (keep cursor position)' })
 
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Half-page down (centered)' })
@@ -1034,22 +1030,6 @@ require('lazy').setup({
 
       -- Statusline is handled by lualine.nvim (see lua/custom/plugins/lualine.lua)
 
-      -- Move lines/selections with Ctrl+j/k
-      require('mini.move').setup {
-        mappings = {
-          -- Visual mode
-          left = '',
-          right = '',
-          down = '<C-j>',
-          up = '<C-k>',
-          -- Normal mode
-          line_left = '',
-          line_right = '',
-          line_down = '<C-j>',
-          line_up = '<C-k>',
-        },
-      }
-
       -- Operators that take a motion, like built-in `d` or `y`
       --
       -- - gpiw - [G]o [P]aste over [I]nner [W]ord (replace with register)
@@ -1196,6 +1176,8 @@ require('lazy').setup({
 })
 
 -- Post-plugin keymaps (set after lazy.setup to avoid being overridden)
+-- Line moving lives on visual J/K (VJ for a single line): Ctrl+j/k belong to
+-- vim-tmux-navigator, and Alt+j/k to AeroSpace's focus bindings.
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 
