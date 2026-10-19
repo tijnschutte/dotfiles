@@ -1,5 +1,21 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# tmux panes inherit an already-extended PATH and then run this file again; -U drops
+# the repeats so each entry appears once.
+typeset -U path PATH
+
+# Runs first so the Ghostty shell that only exists to exec tmux doesn't load anything
+# below. tmux and cbonsai come from brew shellenv in ~/.zprofile, which runs earlier.
+# Auto-start tmux in Ghostty. First window creates the persistent "main" session;
+# later windows join it as a grouped session (own current-window, shared panes) so
+# each screen can browse a different tmux window. destroy-unattached is scoped to
+# the grouped session only, so closing that window cleans it up but "main" survives.
+if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" = "ghostty" ]; then
+  if tmux has-session -t main 2>/dev/null; then
+    exec tmux new-session -t main \; set-option destroy-unattached on
+  else
+    cbonsai -l -t 0.02 -L 50 -M 8 -c "&,%,*" -m "welcome back, tijn"
+    exec tmux new-session -s main
+  fi
+fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -113,29 +129,27 @@ addalias() { echo "alias $1=\"$2\"" >> ~/.zshrc && source ~/.zshrc; }
 
 
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+# conda without `conda init`'s hook, which starts Python on every shell (~0.35s).
+# ~/.condarc has auto_activate_base: false, so the hook did nothing at startup anyway;
+# conda.sh still provides `conda activate`. Re-running `conda init` re-adds the slow block.
+[ -f /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh ] && \
+  . /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh
 
 # Default python/python3 -> Homebrew 3.11 (when no conda env is active)
 export PATH="/opt/homebrew/opt/python@3.11/libexec/bin:$PATH"
 
 export PATH="$(go env GOPATH)/bin:$PATH"
 
+# nvm with --no-use: switching to the default Node is what costs ~0.55s. Instead the
+# newest installed version matching the default alias (a major like "24") goes on PATH
+# directly, so node is there for nvim's LSPs too. An alias like lts/* matches nothing
+# here; then run `nvm use` by hand.
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+_nvm_default=($NVM_DIR/versions/node/v$(<$NVM_DIR/alias/default)*(Nn))
+(( $#_nvm_default )) && path=(${_nvm_default[-1]}/bin $path)
+unset _nvm_default
 export JAVA_HOME=/opt/homebrew/opt/openjdk@17
 export PATH="$JAVA_HOME/bin:$PATH"
 
@@ -143,22 +157,11 @@ export PATH="$JAVA_HOME/bin:$PATH"
 alias claude="claude --dangerously-skip-permissions"
 export PATH="$HOME/.local/bin:$PATH"
 
-# Auto-start tmux in Ghostty. First window creates the persistent "main" session;
-# later windows join it as a grouped session (own current-window, shared panes) so
-# each screen can browse a different tmux window. destroy-unattached is scoped to
-# the grouped session only, so closing that window cleans it up but "main" survives.
-if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" = "ghostty" ]; then
-  if tmux has-session -t main 2>/dev/null; then
-    exec tmux new-session -t main \; set-option destroy-unattached on
-  else
-    cbonsai -l -t 0.02 -L 50 -M 8 -c "&,%,*" -m "welcome back, tijn"
-    exec tmux new-session -s main
-  fi
-fi
-
-# OrbStack
-export PATH="$HOME/.orbstack/bin:$PATH"
 eval "$(zoxide init zsh)"
+
+# fzf: Ctrl-R fuzzy history, Ctrl-T file picker, Alt-C cd into a folder. Also what
+# zoxide's `zi` uses for its picker.
+source <(fzf --zsh)
 
 # Starship prompt. Must run after conda, zoxide and the tmux exec block above.
 eval "$(starship init zsh)"
