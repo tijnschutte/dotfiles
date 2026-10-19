@@ -15,3 +15,27 @@ mouse-hide-while-typing = true
 copy-on-select = true
 macos-option-as-alt = true
 confirm-close-surface = false
+
+# Cmd shortcuts drive tmux instead of Ghostty tabs, which go unused since every window
+# runs tmux. Each sends the prefix (Ctrl+b = \x02) then the tmux key: c opens a window,
+# 1-9 jump to one. Digits are bound twice because the defaults bind both the logical
+# key (super+1) and the physical one (super+digit_1); either would otherwise still win.
+keybind = super+t=text:\x02c
+keybind = super+1=text:\x021
+keybind = super+digit_1=text:\x021
+keybind = super+2=text:\x022
+keybind = super+digit_2=text:\x022
+keybind = super+3=text:\x023
+keybind = super+digit_3=text:\x023
+keybind = super+4=text:\x024
+keybind = super+digit_4=text:\x024
+keybind = super+5=text:\x025
+keybind = super+digit_5=text:\x025
+keybind = super+6=text:\x026
+keybind = super+digit_6=text:\x026
+keybind = super+7=text:\x027
+keybind = super+digit_7=text:\x027
+keybind = super+8=text:\x028
+keybind = super+digit_8=text:\x028
+keybind = super+9=text:\x029
+keybind = super+digit_9=text:\x029
