@@ -51,7 +51,7 @@
   {
     "context": "ProjectPanel && not_editing",
     "bindings": {
-      "\\": "workspace::ToggleLeftDock"
+      "\\": "workspace::ToggleRightDock"
     }
   }
 ]
