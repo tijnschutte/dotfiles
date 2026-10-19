@@ -105,7 +105,7 @@ esc = 'mode main'
 g = ['exec-and-forget open -a Ghostty', 'mode main']
 b = ['exec-and-forget open -a "Google Chrome"', 'mode main']
 m = ['exec-and-forget open -a Mattermost', 'mode main']
-c = ['exec-and-forget open -a "Visual Studio Code"', 'mode main']
+c = ['exec-and-forget open -a Zed', 'mode main']
 f = ['exec-and-forget open -a Finder', 'mode main']
 esc = 'mode main'
 
