@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "cli_default_open_behavior": "new_window",
   "project_panel": {
     "dock": "right"
   },
@@ -27,13 +28,10 @@
       "default_width": 300.0
     },
     "dock": "left",
-    "favorite_models": [],
-    "model_parameters": [],
     "thinking_display": "always_collapsed",
     "expand_edit_card": false,
     "expand_terminal_card": false
   },
-  "proxy": "",
   "telemetry": {
     "diagnostics": false,
     "metrics": false,
@@ -63,7 +61,14 @@
       "type": "registry"
     }
   },
-  "icon_theme": "Zed (Default)",
+  // The default icon theme is monochrome; this one colours icons per file type.
+  "icon_theme": "Material Icon Theme",
+  // Installed on first launch, so a fresh stow reproduces the setup.
+  "auto_install_extensions": {
+    "material-icon-theme": true,
+    "github-theme": true,
+    "html": true
+  },
   "base_keymap": "Zed",
   "ui_font_size": 16,
   "buffer_font_size": 15,
@@ -106,11 +111,10 @@
     "file_icons": true
   },
   "terminal": {
+    // The buffer font has no Nerd Font glyphs, so starship's branch icon rendered as a box.
+    "font_family": "JetBrainsMono Nerd Font Mono",
+    "option_as_meta": true,
     "copy_on_select": true
   },
-  "theme": {
-    "mode": "dark",
-    "light": "Ayu Light",
-    "dark": "GitHub Dark High Contrast",
-  },
+  "theme": "GitHub Dark High Contrast",
 }
