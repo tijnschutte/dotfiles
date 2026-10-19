@@ -13,6 +13,5 @@ cursor-style = bar
 macos-non-native-fullscreen = padded-notch
 mouse-hide-while-typing = true
 copy-on-select = true
-shell-integration-features = ssh-terminfo
 macos-option-as-alt = true
 confirm-close-surface = false
