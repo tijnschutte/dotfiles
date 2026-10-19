@@ -2,9 +2,11 @@ return {
   'rmagatti/goto-preview',
   event = 'LspAttach',
   keys = {
-    { 'gpd', function() require('goto-preview').goto_preview_definition() end, desc = '[G]oto [P]review [D]efinition' },
-    { 'gpi', function() require('goto-preview').goto_preview_implementation() end, desc = '[G]oto [P]review [I]mplementation' },
-    { 'gP', function() require('goto-preview').close_all_win() end, desc = '[G]oto [P]review close' },
+    -- On <leader>p rather than gp*: gp is mini.operators' replace prefix, so gpd would
+    -- wait on timeoutlen before replacing.
+    { '<leader>pd', function() require('goto-preview').goto_preview_definition() end, desc = '[P]review [D]efinition' },
+    { '<leader>pi', function() require('goto-preview').goto_preview_implementation() end, desc = '[P]review [I]mplementation' },
+    { '<leader>pc', function() require('goto-preview').close_all_win() end, desc = '[P]review [C]lose all' },
   },
   opts = {
     default_mappings = false,

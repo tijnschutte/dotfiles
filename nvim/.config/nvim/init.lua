@@ -229,7 +229,7 @@ vim.keymap.set('n', 'C', '"_C')
 
 vim.keymap.set('n', '<leader>a', 'ggVG', { desc = 'Select [A]ll' })
 
-vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[S]earch & replace word under cursor' })
+vim.keymap.set('n', '<leader>rw', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[R]eplace [W]ord under cursor' })
 
 -- Neovim maps `K` to hover by default; remap it only to cap the popup size.
 -- The border comes from 'winborder' above.
@@ -517,13 +517,14 @@ require('lazy').setup({
         callback = function(event)
           local buf = event.buf
 
+          -- Only the gr* forms: a plain `gr` would make every built-in grn/gra/grx wait for
+          -- timeoutlen, and plain gi/gt would shadow insert-at-last-insert and next-tab.
+
           -- Find references for the word under your cursor.
-          vim.keymap.set('n', 'gr', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences' })
           vim.keymap.set('n', 'grr', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences' })
 
           -- Jump to the implementation of the word under your cursor.
           -- Useful when your language has ways of declaring types without an actual implementation.
-          vim.keymap.set('n', 'gi', builtin.lsp_implementations, { buffer = buf, desc = '[G]oto [I]mplementation' })
           vim.keymap.set('n', 'gri', builtin.lsp_implementations, { buffer = buf, desc = '[G]oto [I]mplementation' })
 
           -- Jump to the definition of the word under your cursor.
@@ -543,7 +544,6 @@ require('lazy').setup({
           -- Jump to the type of the word under your cursor.
           -- Useful when you're not sure what type a variable is and you want to see
           -- the definition of its *type*, not where it was *defined*.
-          vim.keymap.set('n', 'gt', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto [T]ype Definition' })
           vim.keymap.set('n', 'grt', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto [T]ype Definition' })
         end,
       })
@@ -641,14 +641,7 @@ require('lazy').setup({
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          -- Rename the variable under your cursor.
-          --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-
-          -- Execute a code action, usually your cursor needs to be on top of an error
-          -- or a suggestion from your LSP for this to activate.
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+          -- Rename (grn) and code action (gra) are Neovim's own defaults.
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
@@ -817,7 +810,7 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>F',
         function() require('conform').format { async = true, lsp_format = 'fallback' } end,
         mode = '',
         desc = '[F]ormat buffer',
@@ -863,30 +856,6 @@ require('lazy').setup({
     event = 'VimEnter',
     version = '1.*',
     dependencies = {
-      -- Snippet Engine
-      {
-        'L3MON4D3/LuaSnip',
-        version = '2.*',
-        build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then return end
-          return 'make install_jsregexp'
-        end)(),
-        dependencies = {
-          -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
-        },
-        opts = {},
-      },
     },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
@@ -914,9 +883,6 @@ require('lazy').setup({
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'super-tab',
-
-        -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-        --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
       },
 
       appearance = {
@@ -940,7 +906,8 @@ require('lazy').setup({
         default = { 'lsp', 'path', 'snippets' },
       },
 
-      snippets = { preset = 'luasnip' },
+      -- Built-in vim.snippet expands LSP snippets; there are no custom snippets to need LuaSnip.
+      snippets = { preset = 'default' },
 
       -- Rust fuzzy matcher: downloads a prebuilt binary on first start, no
       -- toolchain needed. The Lua fallback scores every candidate in
@@ -1021,12 +988,8 @@ require('lazy').setup({
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
 
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- Surroundings come from nvim-surround (ys/ds/cs); mini.surround's `s` prefix
+      -- collided with flash's `s`.
 
       -- Statusline is handled by lualine.nvim (see lua/custom/plugins/lualine.lua)
 
