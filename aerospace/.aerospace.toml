@@ -111,7 +111,8 @@ esc = 'mode main'
 
 # Workspace-to-monitor assignment
 [workspace-to-monitor-force-assignment]
-10 = 'secondary'  # Always assign workspace 10 to the connected external monitor
+9 = 'secondary'   # Workspaces 9 and 10 always live on the external monitor
+10 = 'secondary'
 
 # App-specific rules: float system popups
 [[on-window-detected]]
