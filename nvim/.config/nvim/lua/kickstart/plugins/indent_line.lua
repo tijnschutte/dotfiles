@@ -7,7 +7,8 @@ return {
   -- Enable `lukas-reineke/indent-blankline.nvim`
   -- See `:help ibl`
   main = 'ibl',
+  -- Without tab_char, ibl copies listchars' tab, which is blank, so tab-indented files lose their guides.
   ---@module 'ibl'
   ---@type ibl.config
-  opts = {},
+  opts = { indent = { tab_char = '▎' } },
 }
