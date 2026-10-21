@@ -299,6 +299,27 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
+-- Keep the cursor where it was after yanking: `yip` would otherwise jump it to the
+-- top of the paragraph. Tracked via CursorMoved rather than a `y` mapping, because
+-- mapping `y` would make nvim-surround's `ys` wait on timeoutlen.
+local yank_restore = vim.api.nvim_create_augroup('yank-keep-cursor', { clear = true })
+local pre_yank = nil
+vim.api.nvim_create_autocmd('CursorMoved', {
+  desc = 'Remember cursor position for restoring after a yank',
+  group = yank_restore,
+  callback = function() pre_yank = { win = vim.api.nvim_get_current_win(), pos = vim.fn.getcurpos() } end,
+})
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Restore cursor position after a yank',
+  group = yank_restore,
+  callback = function()
+    -- Only plain yanks; `d`/`c` also fire TextYankPost and must leave the cursor alone.
+    if vim.v.event.operator == 'y' and pre_yank and pre_yank.win == vim.api.nvim_get_current_win() then
+      vim.fn.setpos('.', pre_yank.pos)
+    end
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
