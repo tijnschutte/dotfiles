@@ -111,8 +111,11 @@ esc = 'mode main'
 
 # Workspace-to-monitor assignment
 [workspace-to-monitor-force-assignment]
-9 = 'secondary'   # Workspaces 9 and 10 always live on the external monitor
-10 = 'secondary'
+# Monitors are numbered left to right in System Settings > Displays, the laptop sorts last.
+# 10 takes a lone external, or the second from the left with two; 9 takes the leftmost.
+# shortcut: with one external 9 shares it with 10, the pattern language cannot count monitors
+10 = ['secondary', 2, 'main']
+9 = [1, 'main']
 
 # App-specific rules: float system popups
 [[on-window-detected]]
