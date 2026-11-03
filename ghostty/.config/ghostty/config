@@ -39,3 +39,6 @@ keybind = super+8=text:\x028
 keybind = super+digit_8=text:\x028
 keybind = super+9=text:\x029
 keybind = super+digit_9=text:\x029
+
+# Drop-down terminal from any app. Needs Accessibility permission for Ghostty.
+keybind = global:super+grave_accent=toggle_quick_terminal

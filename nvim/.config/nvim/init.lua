@@ -1044,9 +1044,6 @@ require('lazy').setup({
         comment = { suffix = '' },
       }
 
-      -- Highlight the word under the cursor after a short delay
-      require('mini.cursorword').setup()
-
       -- Highlight trailing whitespace; trim it on demand rather than on save,
       -- since conform.nvim owns what happens to a buffer at write time
       require('mini.trailspace').setup()

@@ -6,9 +6,28 @@ return {
   lazy = false,
   keys = {
     { '<leader>z', function() Snacks.zen() end, desc = 'Toggle [Z]en (reading width)' },
+    { '<leader>gg', function() Snacks.lazygit() end, desc = '[G]it: lazy[g]it' },
+    { '<leader>n', function() Snacks.notifier.show_history() end, desc = '[N]otification history' },
   },
+  init = function()
+    -- ]] / [[ jump between LSP references (Snacks.words). Set buffer-local on LspAttach,
+    -- because python/markdown ftplugins map ]] [[ per buffer and would win over a global map.
+    vim.api.nvim_create_autocmd('LspAttach', {
+      callback = function(ev)
+        local map = function(lhs, dir, desc) vim.keymap.set('n', lhs, function() Snacks.words.jump(dir * vim.v.count1) end, { buffer = ev.buf, desc = desc }) end
+        map(']]', 1, 'Next reference')
+        map('[[', -1, 'Previous reference')
+      end,
+    })
+  end,
   ---@type snacks.Config
   opts = {
+    lazygit = { enabled = true },
+    -- vim.notify as corner pop-ups instead of command-line messages
+    notifier = { enabled = true },
+    -- LSP-aware highlight of the symbol under the cursor (replaces mini.cursorword)
+    words = { enabled = true },
+
     -- Soft wrap alone still breaks at the window edge, which on a full-width pane is
     -- ~210 columns — around three times the length the eye tracks reliably on the
     -- return sweep. Zen centres the buffer at a readable measure instead.
