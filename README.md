@@ -43,6 +43,10 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/cust
 Secrets (API tokens) go in `~/.zshrc.local`, which `.zshrc` sources if present
 and which is never committed.
 
+`macos/` is not a stow package: it holds `defaults write` scripts for apps that keep
+settings in macOS preferences rather than files. Run them once per machine, e.g.
+`sh macos/shottr.sh` (Cmd+Shift+5 captures the clicked window; restarts Shottr).
+
 ## Notes
 
 Neovim 0.12+ — the config uses APIs that replaced `vim.lsp.with`.
