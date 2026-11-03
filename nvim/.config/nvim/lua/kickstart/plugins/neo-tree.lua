@@ -18,6 +18,9 @@ return {
   ---@module 'neo-tree'
   ---@type neotree.Config
   opts = {
+    -- The default "NC" style colours prompt titles with the background colour, which is
+    -- invisible once backgrounds are transparent. "rounded" uses NeoTreeFloatTitle instead.
+    popup_border_style = 'rounded',
     source_selector = {
       winbar = true,
       sources = {

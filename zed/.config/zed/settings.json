@@ -112,7 +112,7 @@
   },
   "terminal": {
     // The buffer font has no Nerd Font glyphs, so starship's branch icon rendered as a box.
-    "font_family": "JetBrainsMono Nerd Font Mono",
+    "font_family": "JetBrains Mono",
     "option_as_meta": true,
     "copy_on_select": true
   },

@@ -953,7 +953,7 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       require('tokyonight').setup {
-        style = 'storm',
+        style = 'night',
         transparent = true,
         styles = {
           sidebars = 'transparent',
@@ -977,6 +977,16 @@ require('lazy').setup({
     end,
   },
   {
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    priority = 1000,
+    config = function()
+      require('github-theme').setup {
+        options = { transparent = true },
+      }
+    end,
+  },
+  {
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
@@ -984,6 +994,7 @@ require('lazy').setup({
       require('catppuccin').setup {
         flavour = 'mocha',
         transparent_background = true,
+        no_italic = true,
       }
     end,
   },
@@ -1181,7 +1192,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 
 -- The active colorscheme. Set here, after lazy.setup, so every theme's setup() has
 -- already run. Swap this one string: 'tokyonight-storm' | 'rose-pine-moon' | 'catppuccin'.
-vim.cmd.colorscheme 'tokyonight-storm'
+vim.cmd.colorscheme 'catppuccin-mocha'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

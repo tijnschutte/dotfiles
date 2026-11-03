@@ -1,9 +1,12 @@
-theme = Github Dark High Contrast
+theme = Catppuccin Mocha
+# Mantle, one shade darker than Mocha base; nvim is transparent so it shows behind code too.
+background = #181825
 # Patched build: Nerd Font glyphs (prompt branch icon, nvim devicons) come from
 # this face. Without it those codepoints render blank.
 font-family = JetBrainsMono Nerd Font Mono
 font-size = 18
-background-opacity = 0.9
+adjust-cell-height = 5%
+background-opacity = 1
 background-blur-radius = 20
 macos-titlebar-style = hidden
 window-padding-x = 15

@@ -19,6 +19,10 @@ return {
     -- would decorate the same nodes twice.
     latex = { enabled = false },
 
+    -- LSP hover (`K`) is a nofile markdown buffer. Neovim sizes the float to the raw
+    -- text, so the padded, min_width code blocks below overflow it and get clipped.
+    overrides = { buftype = { nofile = { enabled = false } } },
+
     -- Heading signs would share the sign column with gitsigns, which pushes the
     -- git marks around whenever a heading scrolls into view.
     sign = { enabled = false },
