@@ -5,6 +5,7 @@ return {
   priority = 1000,
   lazy = false,
   keys = {
+    { '\\', function() Snacks.explorer() end, desc = 'File explorer' },
     { '<leader>z', function() Snacks.zen() end, desc = 'Toggle [Z]en (reading width)' },
     { '<leader>gg', function() Snacks.lazygit() end, desc = '[G]it: lazy[g]it' },
     { '<leader>n', function() Snacks.notifier.show_history() end, desc = '[N]otification history' },
@@ -22,6 +23,16 @@ return {
   end,
   ---@type snacks.Config
   opts = {
+    -- Sidebar file tree with a fuzzy filter box; replaces neo-tree (and netrw for `nvim .`).
+    explorer = { enabled = true },
+    -- Show dotfiles and gitignored files, as neo-tree did.
+    picker = { sources = { explorer = { hidden = true, ignored = true } } },
+    -- Floating prompt for vim.ui.input (LSP rename, explorer new file, ...).
+    input = { enabled = true },
+    -- Indent guides with the current scope highlighted; replaces indent-blankline.
+    indent = { enabled = true },
+    statuscolumn = { enabled = true },
+    scroll = { enabled = true },
     lazygit = { enabled = true },
     -- vim.notify as corner pop-ups instead of command-line messages
     notifier = { enabled = true },

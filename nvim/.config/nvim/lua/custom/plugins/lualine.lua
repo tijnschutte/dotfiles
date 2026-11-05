@@ -5,7 +5,7 @@ return {
     options = {
       theme = 'auto',
       globalstatus = true,
-      disabled_filetypes = { statusline = { 'neo-tree' } },
+      disabled_filetypes = { statusline = { 'snacks_picker_list' } },
       component_separators = { left = '', right = '' },
       section_separators = { left = '', right = '' },
     },

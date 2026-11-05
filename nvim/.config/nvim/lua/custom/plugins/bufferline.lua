@@ -12,7 +12,7 @@ return {
       diagnostics = 'nvim_lsp',
       -- Hide the empty startup buffer; an unnamed buffer you typed into stays visible.
       custom_filter = function(buf) return vim.api.nvim_buf_get_name(buf) ~= '' or vim.bo[buf].modified end,
-      offsets = { { filetype = 'neo-tree', text = 'Files', highlight = 'Directory', separator = true } },
+      offsets = { { filetype = 'snacks_layout_box', text = 'Files', highlight = 'Directory', separator = true } },
     },
     -- Catppuccin's theme goes fully transparent with transparent_background, which makes the
     -- bar invisible. Repaint it as a header: crust strip, active tab in base like the editor.

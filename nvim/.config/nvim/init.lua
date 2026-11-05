@@ -1130,10 +1130,8 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   require 'kickstart.plugins.debug',
-  require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommended keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -1181,11 +1179,8 @@ vim.api.nvim_create_autocmd('ColorScheme', {
     vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
     vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'none' })
     vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
-    vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
-    vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
-    -- Float popup titles (e.g. neo-tree's "Enter name for new file…" prompt) default
+    -- Float popup titles (e.g. the explorer's "new file" prompt) default
     -- to a dim gray that's illegible over the transparent background. Brighten + bold them.
-    vim.api.nvim_set_hl(0, 'NeoTreeFloatTitle', { fg = '#c0caf5', bold = true, bg = 'none' })
     vim.api.nvim_set_hl(0, 'FloatTitle', { fg = '#c0caf5', bold = true, bg = 'none' })
   end,
 })
