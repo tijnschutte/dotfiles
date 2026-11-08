@@ -1,4 +1,4 @@
--- Floating cmdline popup (`:`, `/`, `?`), centered at the top, just under the tab bar.
+-- Floating cmdline popup (`:`, `/`, `?`), centered near the bottom of the screen.
 return {
   'folke/noice.nvim',
   event = 'VeryLazy',
@@ -15,7 +15,7 @@ return {
     },
     views = {
       cmdline_popup = {
-        position = { row = 3, col = '50%' },
+        position = { row = '85%', col = '50%' },
         size = { width = 60, height = 'auto' },
       },
     },
