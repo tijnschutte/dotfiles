@@ -1,0 +1,4 @@
+#!/bin/bash
+# Run with no arguments, `borders` executes this file. Re-run it to apply changes live.
+# Catppuccin Mocha: subtext0 focused, surface1 unfocused.
+borders active_color=0xffa6adc8 inactive_color=0xff45475a width=2.0

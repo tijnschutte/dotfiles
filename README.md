@@ -11,6 +11,7 @@ file's path here states where it lands — no install script decides that.
 | `tmux` | `~/.tmux.conf` | multiplexer |
 | `sketchybar` | `~/.config/sketchybar` | menu bar |
 | `aerospace` | `~/.aerospace.toml`, `~/.config/aerospace/` | tiling window manager, workspace-change hook |
+| `borders` | `~/.config/borders` | JankyBorders window borders; AeroSpace starts it at login |
 | `starship` | `~/.config/starship.toml` | shell prompt |
 | `zsh` | `~/.zshrc` | shell, Oh My Zsh based |
 | `zed` | `~/.config/zed` | editor, Vim mode; whole directory is linked because Zed saves by rename, which would replace a file symlink |
@@ -23,7 +24,7 @@ brew install --cask ghostty zed nikitabobko/tap/aerospace font-jetbrains-mono-ne
 
 git clone git@github.com:tijnschutte/dotfiles.git
 cd dotfiles
-stow -t ~ nvim ghostty tmux sketchybar aerospace starship zsh zed
+stow -t ~ nvim ghostty tmux sketchybar aerospace borders starship zsh zed
 ```
 
 Stow symlinks rather than copies, so **the clone location is permanent** — moving
@@ -64,7 +65,8 @@ Ghostty is set to `JetBrainsMono Nerd Font Mono`. The patched build matters:
 without it the Nerd Font icon range resolves through a fallback face with
 unrelated metrics.
 
-`borders` is launched by `.aerospace.toml` at startup, not configured here.
+`borders` is started by `.aerospace.toml` at login and reads `bordersrc`.
+After editing it, run `~/.config/borders/bordersrc` to apply the change live.
 
 Optional, for the nvim config's full feature set: `d2` (diagrams), `prettier`
 (formatting), `mmdc` (mermaid).
