@@ -23,6 +23,8 @@ return {
   end,
   ---@type snacks.Config
   opts = {
+    -- Prompts (explorer new file, LSP rename) near the bottom, matching noice's cmdline at 85%.
+    styles = { input = { row = 0.85 } },
     -- Sidebar file tree with a fuzzy filter box; replaces neo-tree (and netrw for `nvim .`).
     explorer = { enabled = true },
     -- Show dotfiles and gitignored files, as neo-tree did.

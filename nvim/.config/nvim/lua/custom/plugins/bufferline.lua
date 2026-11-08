@@ -3,6 +3,13 @@ return {
   'akinsho/bufferline.nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons', 'catppuccin' },
   event = 'VeryLazy',
+  keys = {
+    { '<leader>bd', function() Snacks.bufdelete() end, desc = '[B]uffer [D]elete' },
+    { '<leader>bo', function() Snacks.bufdelete.other() end, desc = '[B]uffers: close [O]thers' },
+    { '<leader>bD', function() Snacks.bufdelete.all() end, desc = '[B]uffers: close all' },
+    { '<leader>bp', '<cmd>BufferLineTogglePin<cr>', desc = '[B]uffer [P]in' },
+    { '<leader>bP', '<cmd>BufferLineGroupClose ungrouped<cr>', desc = '[B]uffers: close un[P]inned' },
+  },
   opts = {
     options = {
       separator_style = 'slant',
