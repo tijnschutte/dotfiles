@@ -13,7 +13,10 @@ else
   sketchybar --set "$NAME" icon=󰿆 icon.color=$RED label=""
 fi
 
-# Populate popup with all tunnels
+# Build the popup only when it is opened, not on every poll.
+[ "$SENDER" = "mouse.clicked" ] || exit 0
+sketchybar --set "$NAME" popup.drawing=toggle
+
 sketchybar --remove '/vpn\.tunnel\..*/' 2>/dev/null
 
 INDEX=0

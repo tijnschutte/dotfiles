@@ -122,20 +122,20 @@ sketchybar --add item clock right                                              \
            --set div_r3 "${div[@]}"                                            \
                                                                                \
            --add item ip_address right                                          \
-           --subscribe ip_address wifi_change                                  \
-           --set ip_address update_freq=10                                     \
+           --subscribe ip_address wifi_change system_woke                      \
+           --set ip_address update_freq=120                                    \
                             icon=󰖪                                             \
                             icon.color=$COMMENT                                \
                             label=""                                           \
                             script="$PLUGIN_DIR/ip_address.sh"                 \
                                                                                \
            --add item vpn right                                                \
+           --subscribe vpn mouse.clicked                                       \
            --set vpn update_freq=60                                            \
                      icon=󰿆                                                    \
                      icon.color=$RED                                           \
                      label=""                                                  \
                      script="$PLUGIN_DIR/vpn.sh"                              \
-                     click_script="sketchybar --set vpn popup.drawing=toggle"  \
                      popup.background.color=$BG_HIGHLIGHT                      \
                      popup.background.corner_radius=10                         \
                      popup.background.border_color=$COMMENT                    \
