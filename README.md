@@ -19,11 +19,9 @@ file's path here states where it lands — no install script decides that.
 ## Install
 
 ```sh
-brew install stow neovim tmux starship eza zoxide felixkratz/formulae/sketchybar felixkratz/formulae/borders
-brew install --cask ghostty zed nikitabobko/tap/aerospace font-jetbrains-mono-nerd-font
-
 git clone git@github.com:tijnschutte/dotfiles.git
 cd dotfiles
+brew bundle   # everything in Brewfile
 stow -t ~ nvim ghostty tmux sketchybar aerospace borders starship zsh zed
 ```
 
@@ -44,17 +42,13 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/cust
 Secrets (API tokens) go in `~/.zshrc.local`, which `.zshrc` sources if present
 and which is never committed.
 
-`macos/` is not a stow package: it holds `defaults write` scripts for apps that keep
-settings in macOS preferences rather than files. Run them once per machine, e.g.
-`sh macos/shottr.sh` (Cmd+Shift+5 captures the clicked window; restarts Shottr).
-
 ## Notes
 
 Neovim 0.12+ — the config uses APIs that replaced `vim.lsp.with`.
 
 `sketchybar` and `aerospace` are one system, not two independent configs. The
 event name `aerospace_workspace_change_$N` is declared in `sketchybarrc`, fired
-from `.aerospace.toml` and `.config/aerospace/on-workspace-change.sh`, and consumed
+from `.config/aerospace/on-workspace-change.sh` and `after-move.sh`, and consumed
 by `plugins/aerospace.sh`; nothing enforces that contract, so renaming it in one
 file fails silently in the other. Every call into the `aerospace` CLI, from either
 package, goes through `aero` in `plugins/aerospace_cli.sh`: the CLI has no timeout,
