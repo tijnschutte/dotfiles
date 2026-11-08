@@ -8,15 +8,15 @@
 
 # Minimal two-liner:
 #   dotfiles on  master [!?] (env)
-#   ❯
+#   $
 # Modules not listed here never render, so new tools stay off the line until
 # added explicitly.
 format = "$directory$git_branch$git_status$conda$python$cmd_duration$line_break$character"
 add_newline = true
 
 [character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
+success_symbol = '[\$](bold green)'
+error_symbol = '[\$](bold red)'
 
 [directory]
 truncation_length = 4
