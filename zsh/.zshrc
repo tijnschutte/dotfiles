@@ -162,6 +162,16 @@ eval "$(zoxide init zsh)"
 # fzf: Ctrl-R fuzzy history, Ctrl-T file picker, Alt-C cd into a folder. Also what
 # zoxide's `zi` uses for its picker.
 source <(fzf --zsh)
+# Catppuccin Mocha. bg:-1 keeps Ghostty's own background instead of painting base over it.
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#313244,bg:-1,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+--color=selected-bg:#45475a,border:#6c7086,label:#cdd6f4"
+
+# Man pages through bat, so they get the same theme. col strips man's backspace bold.
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
 
 # Starship prompt. Must run after conda, zoxide and the tmux exec block above.
 eval "$(starship init zsh)"

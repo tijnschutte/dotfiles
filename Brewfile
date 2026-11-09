@@ -21,6 +21,11 @@ brew "fd"
 brew "tree-sitter-cli"
 brew "lazygit"     # snacks <leader>gg
 
+# Catppuccin-themed CLI tools: bat/, git/ (delta), btop/
+brew "bat"
+brew "git-delta"
+brew "btop"
+
 # window manager and bar
 cask "aerospace"
 brew "felixkratz/formulae/sketchybar"
@@ -30,6 +35,7 @@ brew "narugit/tap/smctemp" # sketchybar temperature item
 # apps with config here
 cask "ghostty"
 cask "zed"
+cask "raycast"     # config not tracked: export/import it from Raycast Settings > Advanced
 
 # fonts: sketchybar uses Hack + app font, ghostty uses JetBrains Mono
 cask "font-hack-nerd-font"

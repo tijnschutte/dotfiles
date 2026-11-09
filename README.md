@@ -14,6 +14,10 @@ file's path here states where it lands — no install script decides that.
 | `borders` | `~/.config/borders` | JankyBorders window borders; AeroSpace starts it at login |
 | `starship` | `~/.config/starship.toml` | shell prompt |
 | `zsh` | `~/.zshrc` | shell, Oh My Zsh based |
+| `bat` | `~/.config/bat` | `cat`/man pager theme, also used by delta |
+| `git` | `~/.config/git/config` | delta as git pager; identities stay in untracked `~/.gitconfig` |
+| `btop` | `~/.config/btop` | system monitor; btop rewrites `btop.conf` on exit, so changed settings show up as diffs |
+| `lazygit` | `~/Library/Application Support/lazygit` | lazygit theme (its macOS config dir) |
 | `zed` | `~/.config/zed` | editor, Vim mode; whole directory is linked because Zed saves by rename, which would replace a file symlink |
 
 ## Install
@@ -22,7 +26,8 @@ file's path here states where it lands — no install script decides that.
 git clone git@github.com:tijnschutte/dotfiles.git
 cd dotfiles
 brew bundle   # everything in Brewfile
-stow -t ~ nvim ghostty tmux sketchybar aerospace borders starship zsh zed
+stow -t ~ nvim ghostty tmux sketchybar aerospace borders starship zsh zed bat git btop lazygit
+./macos.sh    # Dock, menu bar, Spaces settings; log out after
 ```
 
 Stow symlinks rather than copies, so **the clone location is permanent** — moving

@@ -11,3 +11,6 @@ spell/
 # Zed runtime state; the stowed directory symlink puts it inside the repo
 zed/.config/zed/prompts/
 zed/.config/zed/themes/
+
+# btop writes its log next to the stowed config
+btop.log

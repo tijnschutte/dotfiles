@@ -1,0 +1,2 @@
+# Built into bat since 0.25, no theme file needed. delta reuses it for syntax colors.
+--theme="Catppuccin Mocha"
